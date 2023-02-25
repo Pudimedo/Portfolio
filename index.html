@@ -33,28 +33,60 @@
             margin: 0;
             padding: 0;
         }
-        #cursor{
-            width: 50px;
-            height: 50px;
-            display: block;
+        #canvas-stars-sky{
             position: absolute;
-            background-color: transparent;
+        }
+        .text{
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            color: wheat;
+            line-height: 68px;
+            font-size: 70px;
         }
     </style>
 </head>
 <body>
-    <div id="cursor"></div>
     <div class="container">
         <img src="spr_portfolio_background_01.png" alt="moon-sky" id="moon-sky">
-        <img src="spr_stars_background.png" alt="stars-sky" id="stars-sky" onmousemove="getCursorPosition(event)">
+        <img src="spr_stars_background.png" alt="stars-sky" id="stars-sky"  onload="draw_canvas()">
+        <h1 class="text">Hi I'm Godofredo</h1>
+        <canvas id="canvas-stars-sky" height="656" width="1336" onmousemove="check_alpha_pixel(event)" onclick="play_sound()">
+            Your browser does not support canvas
+        </canvas>
     </div>
     <footer>Inspo: digitalplaguefox,</footer>
 
     <script>
-        function getCursorPosition(event){
-            document.getElementById("cursor").innerText = event.clientX
-            document.getElementById("cursor").innerText += event.clientY
-    }
+        var check_pixel = {}
+        function draw_canvas(){
+            var canvas_stars_sky = document.getElementById("canvas-stars-sky");
+            var ctx = canvas_stars_sky.getContext("2d");
+            var img = document.getElementById("stars-sky");
+            ctx.drawImage(img, 0, 0);
+        }
+        function check_alpha_pixel(event){
+            var canvas_stars_sky = document.getElementById("canvas-stars-sky");
+            var ctx = canvas_stars_sky.getContext("2d");
+            var data = ctx.getImageData(event.clientX, event.clientY - 12, 1, 1).data
+            if (data != "0,0,0,0"){
+                check_pixel.boolean = true
+                console.log("aaaaaaaaa")
+            }
+            else{
+                check_pixel.boolean = false
+            }
+        }
+        function play_sound(){
+            var star_sounds_01 = new Audio('star_sound_01.mp3')
+            var star_sounds_02 = new Audio('star_sound_02.mp3')
+            var star_sounds_03 = new Audio('star_sound_03.mp3')
+            var star_sounds_04 = new Audio('star_sound_04.mp3')
+            var star_sounds = [star_sounds_01, star_sounds_02, star_sounds_03, star_sounds_04]
+            if (check_pixel.boolean == true){
+                star_sounds[Math.floor(Math.random() * star_sounds.length)].play()
+            }
+        }
     </script>
 </body>
 </html>
